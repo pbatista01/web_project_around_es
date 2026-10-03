@@ -36,3 +36,6 @@ El proyecto permitió aplicar conceptos fundamentales de JavaScript, como funcio
 - Mejorar las animaciones y transiciones de los elementos interactivos.
 - Implementar un sistema de confirmación antes de eliminar una tarjeta.
 - Añadir nuevas funcionalidades para mejorar la interacción entre usuarios.
+
+## Github page
+https://pbatista01.github.io/web_project_around_es/
