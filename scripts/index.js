@@ -7,14 +7,16 @@ const initialCards = [
     {name: "Lago di Braies", link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lago.jpg"}
 ]
 
-const profileEditBtn = document.querySelector(".profile__edit-button");
-const editPopup = document.querySelector("#edit-popup");
-const popupCloseBtn = editPopup.querySelector(".popup__close");
+
+const profileEditButton = document.querySelector(".profile__edit-button");
 const profileName = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
+
+const editPopup = document.querySelector("#edit-popup");
+const popupCloseButton = editPopup.querySelector(".popup__close");
 const popupInputName = editPopup.querySelector(".popup__input_type_name");
 const popupInputDescription = editPopup.querySelector(".popup__input_type_description");
-const popupForm = editPopup.querySelector("#edit-profile-form");
+const editProfileForm = editPopup.querySelector("#edit-profile-form");
 
 const cardTemplate = document.querySelector("#card-template").content.querySelector(".card");
 
@@ -25,9 +27,13 @@ const inputCardName = newCardModal.querySelector(".popup__input_type_card-name")
 const inputCardLink = newCardModal.querySelector(".popup__input_type_url");
 const cardsContainer = document.querySelector(".cards__list");
 const createCardButton = newCardModal.querySelector(".popup__button");
+const closeCardModalButton = newCardModal.querySelector(".popup__close");
+const newCardForm = newCardModal.querySelector("#new-card-form");
 
 const newImageModal = document.querySelector("#image-popup");
-const popupImageCloseBtn = newImageModal.querySelector(".popup__close");
+const imagePopupImage = newImageModal.querySelector(".popup__image");
+const imagePopupCaption = newImageModal.querySelector(".popup__caption");
+const popupImageCloseButton = newImageModal.querySelector(".popup__close");
 
 function openModal(modal){
     modal.classList.add("popup_is-opened");
@@ -60,10 +66,10 @@ function handleCardFormSubmit(evt){
     const cardLink = inputCardLink.value;
     renderCard(cardName, cardLink, cardsContainer);
     closeModal(newCardModal);
-    popupForm.reset();
+    newCardForm.reset();
 }
 
-function getCardElement(name ="Sin titulo", link = "./images/placeholder.jpg"){
+function getCardElement(name ="Sin título", link = "./images/placeholder.jpg"){
     const cardElement = cardTemplate.cloneNode(true);
     const cardImage = cardElement.querySelector(".card__image");
     const cardTitle = cardElement.querySelector(".card__title");
@@ -92,41 +98,42 @@ function getCardElement(name ="Sin titulo", link = "./images/placeholder.jpg"){
 
 function handleCardImageClick(evt){
     const cardImage = evt.target;
-    const imagePopup = document.querySelector("#image-popup");
-    const imagePopupImage = imagePopup.querySelector(".popup__image");
-    const imagePopupCaption = imagePopup.querySelector(".popup__caption");
     imagePopupImage.src = cardImage.src;
     imagePopupImage.alt = cardImage.alt;
     imagePopupCaption.textContent = cardImage.alt;
-    openModal(imagePopup);
+    openModal(newImageModal);
 }
 
 function renderCard(name, link, container){
     const cardElement = getCardElement(name, link);
-    container.append(cardElement);
+    container.prepend(cardElement);
 }
 
 
-initialCards.forEach(function(card){
-    renderCard(card.name, card.link, document.querySelector(".cards__list"));
+initialCards.slice().reverse().forEach(function(card){
+    renderCard(card.name, card.link, cardsContainer);
 });
 
-profileEditBtn.addEventListener("click", function(){
+profileEditButton.addEventListener("click", function(){
     handleOpenEditModal();
 });
 
-popupCloseBtn.addEventListener("click", function(){
+popupCloseButton.addEventListener("click", function(){
     closeModal(editPopup);
 });
 
-popupForm.addEventListener("submit", handleProfileFormSubmit);
+editProfileForm.addEventListener("submit", handleProfileFormSubmit);
 
 addCardButton.addEventListener("click", function(){
     openModal(newCardModal);
 });
 
-createCardButton.addEventListener("click", handleCardFormSubmit);
+newCardForm.addEventListener("submit", handleCardFormSubmit);
 
-popupImageCloseBtn.addEventListener("click", function(){
+closeCardModalButton.addEventListener("click", function(){
+    closeModal(newCardModal);
+});
+
+popupImageCloseButton.addEventListener("click", function(){
     closeModal(newImageModal);
 });
