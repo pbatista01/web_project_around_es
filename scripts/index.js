@@ -1,3 +1,5 @@
+import  {setEventListeners, resetValidation} from "./validate.js";
+
 const initialCards = [
     {name: "Valle de Yosemite", link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg"},
     {name: "Lago Louise", link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lake-louise.jpg"},
@@ -41,6 +43,12 @@ function openModal(modal){
 
 function closeModal(modal){
     modal.classList.remove("popup_is-opened");
+
+    const formElement = modal.querySelector(".popup__form");
+    if(formElement){
+        resetValidation(formElement);
+        formElement.reset();
+    }
 }
 
 function fillProfileForm(){
@@ -50,6 +58,7 @@ function fillProfileForm(){
 
 function handleOpenEditModal(){
     fillProfileForm();
+    resetValidation(editProfileForm);
     openModal(editPopup);
 }
 
@@ -109,6 +118,29 @@ function renderCard(name, link, container){
     container.prepend(cardElement);
 }
 
+const formList = Array.from(document.querySelectorAll(".popup__form"));
+formList.forEach((formElement) => {
+    setEventListeners(formElement);
+}); 
+
+function closeModalByClickingOutside(event){
+    if(event.target.classList.contains("popup_is-opened")){
+        closeModal(event.target);
+    }
+}
+
+document.addEventListener("click", closeModalByClickingOutside);
+
+function closeModalOWithEscapeKey(event){
+    if(event.key === "Escape"){
+        const openedModal = document.querySelector(".popup_is-opened");
+        if(openedModal){
+            closeModal(openedModal);
+        }
+    }
+}
+
+document.addEventListener("keydown", closeModalOWithEscapeKey);
 
 initialCards.slice().reverse().forEach(function(card){
     renderCard(card.name, card.link, cardsContainer);
@@ -125,6 +157,7 @@ popupCloseButton.addEventListener("click", function(){
 editProfileForm.addEventListener("submit", handleProfileFormSubmit);
 
 addCardButton.addEventListener("click", function(){
+    resetValidation(newCardForm);
     openModal(newCardModal);
 });
 
